@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Hue-Wheel demo</title>
+
+    <style>
+		html {
+			-ms-touch-action: none;
+			}
+		html, body {
+			width:100%;
+			margin:0;
+			}
+		body {
+			background:#bbb;
+			font:14px sans-serif;
+			}
+		#container {
+			width:300px;
+			margin:25px auto 0 auto;
+			}
+		#options {
+			margin-left:20px;
+			}
+		#info {
+			display:inline-block;
+			margin-bottom:12px;
+			}
+		#spot {
+			display:inline-block;
+			width:16px;
+			height:9px;
+			margin-right:7px;
+			border:1px solid #000;
+			}
+	    .logo {
+		    width:100%;
+		    box-sizing:border-box;
+		    text-align: center;
+		    }
+	</style>
+
+    <script src="../huewheel.min.js"></script>
+</head>
+<body>
+
+	<div id="container">
+
+        <div id="huewheel"></div>
+        <br>
+
+        <div id="spot"></div>
+        <div id="info"></div>
+        <br>
+
+        <div id="options">
+
+            <input id="CHANGEL" type="checkbox" checked> <label for="CHANGEL">Change lightness</label><br>
+            <input id="CHANGES" type="checkbox" checked> <label for="CHANGES">Change saturation</label><br>
+            <input id="SHOWCOLOR" type="checkbox" checked> <label for="SHOWCOLOR">Show color spot</label><br>
+            <input id="CLICKRING" type="checkbox"> <label for="CLICKRING">Clickable lightness ring</label><br>
+
+			<p><label for="CSPC">Color space</label>
+                <select id="CSPC">
+                    <option value="hsl" selected>HSL</option>
+                    <option value="hsv">HSV</option>
+                </select>
+            </p>
+
+        </div>
+
+		<hr>
+		<p class="logo">
+			<img src="data:image/png;base64,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">
+		</p>
+	</div>
+
+<script type="text/javascript">
+
+	/**
+	 *	The options presented here are for the most part optional
+	*/
+
+	var CHANGES = document.getElementById('CHANGES'),
+		CHANGEL = document.getElementById('CHANGEL'),
+		SHOWCOLOR = document.getElementById('SHOWCOLOR'),
+		CLICKRING = document.getElementById('CLICKRING'),
+		CSPC = document.getElementById('CSPC'),
+		spot = document.getElementById('spot'),
+		info = document.getElementById('info'),
+
+		hw = new HueWheel('huewheel', {
+			onChange:				update,
+			saturation:				1.0,
+			lightness:				0.5,
+			colorSpace:				'hsl',
+
+			diameter:				300,
+			shadowBlur:				7,
+			changeSaturation:		true,
+			changeLightness:		true,
+			showColor:				true,
+			colorSpotWidth:			0.7,
+			colorSpotBorder:		1,
+			colorSpotBorderColor:	'#333',
+			quality:				2,
+
+			hueKnobSize:			0.14,
+			hueKnobColor:			'#ffc',
+			lightKnobColor:			'#ff0',
+			hueKnobColorSelected:	'#fff',
+			hueKnobShadow:			true,
+			lightnessKnobColorSelected:	'#f00',
+			lightnessRingClickable:	false,
+
+			useKeys:				true,
+			hueKeyDelta:			2,
+			saturationKeyDelta:		1,
+			lightnessKeyDelta:		1,
+			shiftKeyFactor:			10
+		});
+
+	function update(e) {
+
+		info.innerHTML = 'H: ' + e.h.toFixed(0) + ' S:' + e.s.toFixed(2) + ' L:' + e.l.toFixed(2) +
+						 ' R:' + e.r + ' G:' + e.g + ' B:' + e.b;
+
+		spot.style.backgroundColor = 'rgb(' + e.r + ',' + e.g + ',' + e.b + ')';
+	}
+
+	CHANGES.onchange = function() {
+		hw.changeSaturation(CHANGES.checked);
+	};
+
+	CHANGEL.onchange = function() {
+		hw.changeLightness(CHANGEL.checked);
+		CLICKRING.disabled = !CHANGEL.checked;
+	};
+
+	SHOWCOLOR.onchange = function() {
+		hw.showColor(SHOWCOLOR.checked);
+	};
+
+	CLICKRING.onchange = function() {
+		hw.lightnessClickable(CLICKRING.checked);
+	};
+
+	CSPC.onchange = function() {
+		hw.colorSpace(CSPC.value);
+	};
+
+</script>
+</body>
+</html>
