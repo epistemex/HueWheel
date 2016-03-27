@@ -1,5 +1,5 @@
 /*!
- *	Hue Wheel 1.1.3
+ *	Hue Wheel 1.1.4
  *	(c) 2013-2016 Epistemex.com
  *	License: MIT
 */
@@ -1141,7 +1141,7 @@ function HueWheel(elementID, options) {
 
 		validate();
 		render();
-		sendEvent();
+		//sendEvent();
 	}
 
 	/**
