@@ -1,5 +1,5 @@
 /*!
- *	Hue Wheel 1.1.4
+ *	Hue Wheel 1.1.5
  *	(c) 2013-2016 Epistemex.com
  *	License: MIT
 */
@@ -578,6 +578,7 @@ function HueWheel(elementID, options) {
 		if (hasChanged) {
 			cevent(e);
 			me.hsl(angle, saturation, lightness);
+			sendEvent()
 		}
 
 	}

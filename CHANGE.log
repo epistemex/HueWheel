@@ -1,6 +1,9 @@
 CHANGE LOG
 ==========
 
+1.1.5
+FIX: Missing event from key strokes after 1.1.4 fix
+
 1.1.4
 FIX: Removed sending event when using setHSL() due to risk of recursive calling using onChange handlers.
 
