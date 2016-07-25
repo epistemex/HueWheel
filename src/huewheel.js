@@ -1,5 +1,5 @@
 /*!
- *	Hue Wheel 1.1.5
+ *	Hue Wheel 1.1.6
  *	(c) 2013-2016 Epistemex.com
  *	License: MIT
 */
@@ -442,7 +442,9 @@ function HueWheel(elementID, options) {
 			var ta = a * r2d - 90;
 			if (ta < 0) ta += 360;
 
-			me.hsl(angle, saturation, ta / 360)
+			me.hsl(angle, saturation, ta / 360);
+
+			sendEvent()
 		}
 
 		return false;
