@@ -1,7 +1,12 @@
 CHANGE LOG
 ==========
 
-1.2
+1.2.1
+FIX: Calculation error in hsl2rgb().
+FIX: Minor render issue with hue ring in the blink engine.
+IMP: Speed improvement for hsl2rgb().
+
+1.2.0
 ADD: Hold CTRL key down to lock hue operator while moving the saturation slider.
 FIX: Error in hsv2rgb() computation
 FIX: A "strict" issue (function def. in else-block)

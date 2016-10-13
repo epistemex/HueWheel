@@ -100,9 +100,6 @@
 			}
 	</style>
 
-    <script src="../huewheel.min.js"></script>
-    <script src="easyCanvas.1.2.min.js"></script>
-    <script src="fastHSL2RGB.0.1.min.js"></script>
 </head>
 <body>
 
@@ -124,6 +121,8 @@
         <span id="saveResult">Save tinted image</span>
     </div>
 
+<script src="../huewheel.min.js"></script>
+<script src="easyCanvas.1.2.min.js"></script>
 <script>
 
 /*
@@ -158,7 +157,6 @@ var ez1 = new easyCanvas('original'),
 	/*
 	 *	Use Faaast HSL2RGB converter for live preview.
 	*/
-	conv = new FastHSL2RGB(false, true),
 	hasImage = false,
 
 	/*
@@ -172,7 +170,12 @@ var ez1 = new easyCanvas('original'),
 	/*
 	 *	A default image (easy for pad/phone users)
 	*/
-	img			= new Image;
+	img			= new Image,
+
+	/*
+	 * debounce rendering to avoid jerkiness
+	 */
+	tr;
 
 // load image
 img.onload = addOption;
@@ -207,30 +210,27 @@ function update() {
 
 	if (!hw || !hasImage) return;
 
-	var data = ddata.data,
-		len = data.length,
-		i = 0,
-		cnt = 0,
+	cancelAnimationFrame(tr);
+	tr = requestAnimationFrame(function() {
+		var len = data.length,
+			i = 0,
+			cnt = 0,
 
-		hsl = hw.hsl(),
-		h = hsl.h,
-		s = hsl.s;
+			hsl = hw.hsl(),
+			h = hsl.h,
+			s = hsl.s,
+			c1, c2;
 
-	for(; i < len; i += 8) {
+		while(i < len) {
+			c1 = hw.hsl2rgb(h, s, lumas[cnt++]);
+			c2 = hw.hsl2rgb(h, s, lumas[cnt++]);
+			data[i++] = 0xff000000 | c1.b<<16 | c1.g<<8 | c1.r;
+			data[i++] = 0xff000000 | c2.b<<16 | c2.g<<8 | c2.r;
+		}
 
-		var	c1 = conv.hsl2rgb(h, s, lumas[cnt++]),
-			c2 = conv.hsl2rgb(h, s, lumas[cnt++]);
+		ez2.ctx.putImageData(ddata, 0, 0);
+	})
 
-		data[i  ] = c1.r;
-		data[i+1] = c1.g;
-		data[i+2] = c1.b;
-
-		data[i+4] = c2.r;
-		data[i+5] = c2.g;
-		data[i+6] = c2.b;
-	}
-
-	ez2.ctx.putImageData(ddata, 0, 0);
 }
 
 function onDrop(e) {

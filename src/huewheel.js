@@ -1,5 +1,5 @@
 /*!
- *	Hue Wheel 1.2.0
+ *	Hue Wheel 1.2.1
  *	(c) 2013-2016 Epistemex.com
  *	License: MIT
 */
@@ -631,7 +631,7 @@ function HueWheel(parent, options) {
 		*/
 		ctx.lineWidth = thickness;
 
-		for(i = oldRad = 0; i < 360; i += gwstep) {
+		for(i = oldRad = -0.01; i < 360; i += gwstep) {
 
 			rad = i * d2r;
 
@@ -872,7 +872,29 @@ function HueWheel(parent, options) {
 		return validateRGB(rgb[0] * 255, rgb[1] * 255, rgb[2] * 255)
 	}
 
+	// Credit: https://gist.github.com/aemkei/1325937
 	function hsl2rgb(h, s, l) {
+
+		h /= 60;
+
+		var c = [
+			l += s *= l < 0.5 ? l : 1 - l,
+			l - h % 1 * s * 2,
+			l -= s *= 2,
+			l,
+			l + h % 1 * s,
+			l + s
+		];
+
+		return validateRGB(
+			c[~~h    % 6] * 255,
+			c[(h|16) % 6] * 255,
+			c[(h|8)  % 6] * 255
+		);
+	}
+
+/*
+	function hsl2rgb2(h, s, l) {
 
 		var r, g, b, q, p;
 
@@ -900,6 +922,7 @@ function HueWheel(parent, options) {
 
 		return validateRGB(r * 255, g * 255, b * 255)
 	}
+*/
 
 	function rgb2hsl(r, g, b){
 
