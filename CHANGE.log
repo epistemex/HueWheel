@@ -1,6 +1,16 @@
 CHANGE LOG
 ==========
 
+1.2
+ADD: Hold CTRL key down to lock hue operator while moving the saturation slider.
+FIX: Error in hsv2rgb() computation
+FIX: A "strict" issue (function def. in else-block)
+FIX: Render error with lightness ring
+CHG: Less strict option types - more responsibility on developer to check option values
+REM: option "brightness" removed. Was alias for option "lightness".
+REM: Quality parameters not needed anymore - rewrote wheel render. Using adaptive steps.
+OPT: Mmeory reduction, internal refactoring
+
 1.1.6
 FIX: Missing event from single-clicking on lightness wheel
 

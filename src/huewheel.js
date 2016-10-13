@@ -1,14 +1,14 @@
 /*!
- *	Hue Wheel 1.1.6
+ *	Hue Wheel 1.2.0
  *	(c) 2013-2016 Epistemex.com
  *	License: MIT
 */
 
 /**
- * Create a new instance of a Hue wheel.
+ * Create a new instance of a Hue wheel, replacing the content of given parent element with the control.
  *
- * @param {String|HTMLElement} elementID - ID of an element or the element itself to turn into a control
- * @param {Object} [options] Options given as JSON
+ * @param {String|HTMLElement} parent - parent element or ID of parent element to turn into a control (content will be replaced with the control).
+ * @param {Object} [options] Options given as a JSON object
  * @param {Number} [options.diameter=250] diameter (in pixels) of control
  * @param {Number} [options.shadowBlur=0] diameter (in pixels) of shadow
  * @param {String} [options.shadowColor='black'] CSS color of shadow if active (see shadowBlur)
@@ -26,7 +26,6 @@
  * @param {String} [options.colorSpotBorderColor='black'] If showColor and colorBorder > 0 this will be the color of the border.
  * @param {Number} [options.thicknessHue] Thickness of hue ring in pixels
  * @param {Number} [options.thicknessLightness] Thickness of lightness ring in pixels
- * @param {Number} [options.quality=2] Quality or resolution of internal gradients. Higher is better. Note: must be in steps of 2^q (ie., 1, 2, 4). The higher quality the longer time it takes to render the control.
  * @param {Number} [options.hueKnobSize=0.1] A value [0.0, 1.0] determining the size of the hue knob relative to radius.
  * @param {String} [options.hueKnobColor='white'] Color of hue knob.
  * @param {String} [options.lightnessKnobColor='white'] Color of lightness knob (if ligthness ring is visible).
@@ -46,47 +45,39 @@
  * @param {Number} [options.lightnessKeyCodeUp=38] Key code to use to increase lightness value (default up arrow key).
  * @param {Number} [options.lightnessKeyCodeDown=40] Key code to use to increase lightness value (default down arrow key).
  * @param {Boolean} [options.tabable=true] Allows the control to be selected and operated with tab key and hotkeys.
+ * @param {Boolean} [options.ctrlLock=true] Allow holding CTRL key to lock hue while moving saturation slider
  * @constructor
  */
-function HueWheel(elementID, options) {
+function HueWheel(parent, options) {
 
-	options = options || {};
-
-	if (isStr(elementID))
-		elementID = document.getElementById(elementID);
+	"use strict";
 
 	var	me					= this,
-		msPointer			= navigator.msPointerEnabled, // && navigator.msMaxTouchPoints,
+		element 			= (typeof parent === "string") ? document.getElementById(parent) : parent,
+		msPointer			= navigator.msPointerEnabled,
 		canvas				= document.createElement('canvas'),
-		gcanvas				= document.createElement('canvas'),
 		ctx					= canvas.getContext('2d'),
-		gctx				= gcanvas.getContext('2d'),
-		gw					= 360 * (options.quality || 2),
-		gwstep				= 360 / gw,
-		grad				= gctx.createLinearGradient(0, 0, gw, 0),
-
-		idata,
-		data,
+		canvasStyle			= canvas.style,
 
 		// pre-calcs
-		dlt					= 0.5 * Math.PI,
-		d2r					= Math.PI / 180,
-		r2d					= 180 / Math.PI,
-		pi2					= 2 * Math.PI,
+		pi					= Math.PI,
+		d2r					= pi / 180,
+		r2d					= 180 / pi,
+		pi2					= 2 * pi,
+		dlt					= 0.5 * pi,
 
 		// options
-		w					= 250,
-		h					= w,
-		cx					= w * 0.5,
-		cy					= cx,
-		angle				= 0,
-
+		diameter			= 250,
+		center				= diameter * 0.5,
 		showColor			= true,
 		isHSL				= true,
 		useLuma				= true,
 		useSat				= true,
+
+		hue					= 0,
 		saturation			= 1.0,
 		lightness			= 0.5,
+		oldhue 				= 0,
 
 		useKeys				= true,
 		hueKeyDelta			= 1,
@@ -100,8 +91,8 @@ function HueWheel(elementID, options) {
 		lightKeyCodeDown	= 40,	// arrow down
 		keyShiftFactor		= 10,
 
-		thickness			= Math.max(w * 0.12, 3),
-		lumaThickness		= useLuma ? Math.max(w * 0.05, 3) : 0,
+		thickness			= Math.max(diameter * 0.12, 3),
+		lumaThickness		= useLuma ? Math.max(diameter * 0.05, 3) : 0,
 		knobWidth			= 0.1,
 		shadow				= 0,
 		hueShadow			= false,
@@ -114,231 +105,205 @@ function HueWheel(elementID, options) {
 		hueKnobColorSel		= '#777',
 		lightKnobColorSel	= '#777',
 		lightClickable		= false,
-
+		ctrlLock			= true,
 		accessibility		= true,	// tabable
 
 		// calced setup
-		hr,
-		lr,
-		lkw,
+		radiusHue,
+		radiusLightness,
+		lumaKnobWidth,
 		lumaKnob,
 		hueKnob,
-		i, l,
+		l,
 
 		// internals
 		isDown				= false,
 		isLuma				= false,
 		isTouch				= false,
-		to,
+		timeoutRef,
 		x, y,						// current mouse position
 		r, g, b,					// current RGB
-		keys, key, o;
+
+		canvasEvent = canvas.addEventListener.bind(canvas),
+		windowEvent = window.addEventListener.bind(window);
 
 	/*
 	 *	Parse options
 	*/
-	keys = Object.keys(options);
+	options = options || {};
 
-	for(i = 0; key = keys[i]; i++) {
+	Object.keys(options).forEach(function(key) {
 
-		o = options[key];
+		var value = options[key];
 
-		switch(key) {
-
-			case 'diameter':
-				if (isNum(o)) w = h = options.diameter;
-				cx = w * 0.5;
-				cy = cx;
+		switch (key) {
+			case "diameter":
+				diameter = +value;
+				center = diameter * 0.5;
 				break;
 
-			case 'hue':
-				if (isNum(o)) angle = o % 360;
+			case "hue":
+				hue = +value % 360;
 				break;
 
-			case 'colorSpace':
-				if (isStr(o) && (o === 'hsl' || o === 'hsv')) isHSL = (o === 'hsl');
+			case "colorSpace":
+				isHSL = value === "hsl";
 				break;
 
-			case 'changeLightness':
-				if (isBool(o)) useLuma = o;
-				lumaThickness = useLuma ? Math.max(w * 0.05, 3) : 0;
+			case "changeLightness":
+				useLuma = !!value;
+				lumaThickness = useLuma ? Math.max(diameter * 0.05, 3) : 0;
 				break;
 
-			case 'changeSaturation':
-				if (isBool(o)) useSat = o;
+			case "changeSaturation":
+				useSat = !!value;
 				break;
 
-			case 'saturation':
-				if (isNum(o)) saturation = o;
+			case "saturation":
+				saturation = +value;
 				break;
 
-			case 'lightness':
-			case 'brightness':
-				if (isNum(o)) lightness = o;
+			case "lightness":
+				lightness = +value;
 				break;
 
-			case 'useKeys':
-				if (isBool(o)) useKeys = o;
+			case "useKeys":
+				useKeys = !!value;
 				break;
 
-			case 'hueKeyDelta':
-				if (isNum(o)) hueKeyDelta = o;
+			case "hueKeyDelta":
+				hueKeyDelta = +value;
 				break;
 
-			case 'saturationKeyDelta':
-				if (isNum(o)) satKeyDelta = o;
+			case "saturationKeyDelta":
+				satKeyDelta = +value;
 				break;
 
-			case 'lightnessKeyDelta':
-				if (isNum(o)) lightKeyDelta = o;
+			case "lightnessKeyDelta":
+				lightKeyDelta = +value;
 				break;
 
-			case 'hueKeyCodeUp':
-				if (isNum(o)) hueKeyCodeUp = o;
+			case "hueKeyCodeUp":
+				hueKeyCodeUp = +value;
 				break;
 
-			case 'hueKeyCodeDown':
-				if (isNum(o)) hueKeyCodeDown = o;
+			case "hueKeyCodeDown":
+				hueKeyCodeDown = +value;
 				break;
 
-			case 'saturationKeyCodeUp':
-				if (isNum(o)) satKeyCodeUp = o;
+			case "saturationKeyCodeUp":
+				satKeyCodeUp = +value;
 				break;
 
-			case 'saturationKeyCodeDown':
-				if (isNum(o)) satKeyCodeDown = o;
+			case "saturationKeyCodeDown":
+				satKeyCodeDown = +value;
 				break;
 
-			case 'lightnessKeyCodeUp':
-				if (isNum(o)) lightKeyCodeUp = o;
+			case "lightnessKeyCodeUp":
+				lightKeyCodeUp = +value;
 				break;
 
-			case 'lightnessKeyCodeDown':
-				if (isNum(o)) lightKeyCodeDown = o;
+			case "lightnessKeyCodeDown":
+				lightKeyCodeDown = +value;
 				break;
 
-			case 'shiftKeyFactor':
-				if (isNum(o)) keyShiftFactor = o;
+			case "shiftKeyFactor":
+				keyShiftFactor = +value;
 				break;
 
-			case 'thicknessHue':
-				if (isNum(o)) thickness = o;
+			case "thicknessHue":
+				thickness = +value;
 				break;
 
-			case 'thicknessLuma':
-				if (isNum(o)) lumaThickness = o;
+			case "thicknessLuma":
+				lumaThickness = +value;
 				break;
 
-			case 'hueKnobSize':
-				if (isNum(o)) knobWidth = o;
+			case "hueKnobSize":
+				knobWidth = +value;
 				break;
 
-			case 'shadowBlur':
-				if (isNum(o)) shadow = o;
+			case "shadowBlur":
+				shadow = +value;
 				break;
 
-			case 'hueKnobShadow':
-				if (isBool(o)) hueShadow = o;
+			case "hueKnobShadow":
+				hueShadow = !!value;
 				break;
 
-			case 'showColorSpot':
-				if (isBool(o)) showColor = o;
+			case "showColorSpot":
+				showColor = !!value;
 				break;
 
-			case 'tabable':
-				if (isBool(o)) accessibility = o;
+			case "tabable":
+				accessibility = !!value;
 				break;
 
-			case 'colorSpotWidth':
-				if (isNum(o)) colorWidth = o;
+			case "colorSpotWidth":
+				colorWidth = +value;
 				break;
 
-			case 'colorSpotBorder':
-				if (isNum(o)) colorBorder = o;
+			case "colorSpotBorder":
+				colorBorder = +value;
 				break;
 
-			case 'colorSpotBorderColor':
-				if (isStr(o)) colorBorderColor = o;
+			case "colorSpotBorderColor":
+				colorBorderColor = "" + value;
 				break;
 
-			case 'hueKnobColor':
-				if (isStr(o)) hueKnobColor = o;
+			case "hueKnobColor":
+				hueKnobColor = "" + value;
 				break;
 
-			case 'lightnessKnobColor':
-				if (isStr(o)) lightKnobColor = o;
+			case "lightnessKnobColor":
+				lightKnobColor = "" + value;
 				break;
 
-			case 'hueKnobColorSelected':
-				if (isStr(o)) hueKnobColorSel = o;
+			case "hueKnobColorSelected":
+				hueKnobColorSel = "" + value;
 				break;
 
-			case 'lightnessKnobColorSelected':
-				if (isStr(o)) lightKnobColorSel = o;
+			case "lightnessKnobColorSelected":
+				lightKnobColorSel = "" + value;
 				break;
 
-			case 'lightnessRingClickable':
-				if (isBool(o)) lightClickable = o;
+			case "lightnessRingClickable":
+				lightClickable = !!value;
 				break;
 
-			case 'rgb':
-				if (Array.isArray(o) && o.length === 3) {
+			case "ctrlLock":
+				ctrlLock = !!value;
+				break;
 
-					var	c = isHSL ? rgb2hsl(o[0], o[1], o[2]) : rgb2hsv(o[0], o[1], o[2]);
-
-					angle = c.h;
+			case "rgb":
+				if (Array.isArray(value) && value.length === 3) {
+					var c = isHSL ? rgb2hsl(value[0], value[1], value[2]) : rgb2hsv(value[0], value[1], value[2]);
+					hue = c.h;
 					saturation = c.s;
 					lightness = c.l;
+					validateHSLV()
 				}
-				//break;
+				break;
 		}
-	}
+	});
 
 	/*
 	 *	Init callback vector
 	*/
-	this.onchange = isDef(options.onChange) ? options.onChange : null;
+	this.onchange = options.onChange;
 
 	/*
 	 *	Init canvas for control
 	*/
-	canvas.id = (elementID.id || 'hueWheel') + '_canvas';
+	canvas.id = (element.id || 'hueWheel') + '_canvas';
 	if (accessibility) canvas.tabIndex = 0;
-
-	/*
-	 *	Prepare canvas for gradients.
-	 *	This is used to create radial gradients.
-	*/
-	gcanvas.width = gw;
-	gcanvas.height = 2;
-
-	grad.addColorStop(0, 	'#f00');
-	grad.addColorStop(0.17, '#ff0');
-	grad.addColorStop(0.33, '#0f0');
-	grad.addColorStop(0.5,	'#0ff');
-	grad.addColorStop(0.67, '#00f');
-	grad.addColorStop(0.83, '#f0f');
-	grad.addColorStop(1,	'#f00');
-
-	gctx.fillStyle = grad;
-	gctx.fillRect(0, 0, gw, 1);
-
-	grad = gctx.createLinearGradient(0, 0, gw, 0);
-	grad.addColorStop(0, '#000');
-	grad.addColorStop(1, '#fff');
-
-	gctx.fillStyle = grad;
-	gctx.fillRect(0, 1, gw, 1);
-
-	idata = gctx.getImageData(0, 0, gw, 2);
-	data = idata.data;
 
 	/*
 	 *	Generate control and insert into DOM
 	*/
 	generateCanvas();
-	elementID.innerHTML = '';
-	elementID.appendChild(canvas);
+	element.innerHTML = "";
+	element.appendChild(canvas);
 
 	/*
 	 *	Init first draw and event
@@ -347,34 +312,28 @@ function HueWheel(elementID, options) {
 	sendEvent();
 
 	/*
-	 *	Setup mouse handlers
-	*/
-
-	/*
-	 *	Setup touch handlers
+	 *	Setup mouse and touch handlers
 	*/
 	if (msPointer) {
-		canvas.addEventListener('MSPointerDown', mouseDown, false);
-		window.addEventListener('MSPointerMove', mouseMove, false);
-		window.addEventListener('MSPointerUp', mouseUp, false);
+		canvasEvent('MSPointerDown', mouseDown);
+		windowEvent('MSPointerMove', mouseMove);
+		windowEvent('MSPointerUp', mouseUp);
 	}
 	else {
-		canvas.addEventListener('mousedown', mouseDown, false);
-		window.addEventListener('mousemove', mouseMove, false);
-		window.addEventListener('mouseup', mouseUp, false);
+		canvasEvent('mousedown', mouseDown);
+		windowEvent('mousemove', mouseMove);
+		windowEvent('mouseup', mouseUp);
 
-		canvas.addEventListener('touchstart', mouseDown, false);
-		canvas.addEventListener('touchmove', mouseMove, false);
-		canvas.addEventListener('touchend', mouseUp, false);
+		canvasEvent('touchstart', mouseDown);
+		canvasEvent('touchmove', mouseMove);
+		canvasEvent('touchend', mouseUp);
 	}
 
 
 	/*
 	 *	Setup key handlers
 	*/
-	if (useKeys) {
-		canvas.addEventListener('keydown', keyDown, false);
-	}
+	if (useKeys) canvasEvent('keydown', keyDown);
 
 	/*
 	 * *******  MOUSE handlers  *******
@@ -384,7 +343,7 @@ function HueWheel(elementID, options) {
 
 		getXY(e);
 
-		canvas.style.cursor = 'default';
+		canvasStyle.cursor = 'default';
 
 		/*
 		 *	Check if HUE knob
@@ -421,10 +380,10 @@ function HueWheel(elementID, options) {
 			d = tri.dist,
 			a = tri.angle;
 
-		if (d > hr - thickness * 0.5 && d < hr + thickness * 0.5) {
+		if (d > radiusHue - thickness * 0.5 && d < radiusHue + thickness * 0.5) {
 
-			angle = a * r2d;
-			if (angle < 0) angle += 360;
+			hue = a * r2d;
+			if (hue < 0) hue += 360;
 
 			clear();
 
@@ -437,12 +396,12 @@ function HueWheel(elementID, options) {
 		/*
 		 *	Check if in LIGHTNESS RING
 		*/
-		else if (lightClickable && d > lr - lumaThickness * 0.5 && d < lr + lumaThickness * 0.5) {
+		else if (lightClickable && d > radiusLightness - lumaThickness * 0.5 && d < radiusLightness + lumaThickness * 0.5) {
 
 			var ta = a * r2d - 90;
 			if (ta < 0) ta += 360;
 
-			me.hsl(angle, saturation, ta / 360);
+			me.hsl(hue, saturation, ta / 360);
 
 			sendEvent()
 		}
@@ -450,6 +409,9 @@ function HueWheel(elementID, options) {
 		return false;
 	}
 
+	/*
+	 *	Move handler
+	 */
 	function mouseMove(e) {
 
 		getXY(e);
@@ -463,21 +425,28 @@ function HueWheel(elementID, options) {
 
 			if (!isLuma) {
 
-				angle = a  * r2d;
-				if (angle < 0) angle += 360;
+				if (ctrlLock && e.ctrlKey) {
+					hue = oldhue;
+				}
+				else {
+					hue = a  * r2d;
+					if (hue < 0) hue += 360;
+					oldhue = hue;
+				}
 
 				if (useSat) {
 					if (d < 0) d = 0;
-					if (d > hr - l) d = hr - l;
-					saturation = d / (hr - l);
+					if (d > radiusHue - l) d = radiusHue - l;
+					saturation = d / (radiusHue - l);
 				}
 
 			}
 			else {
-				lightness = ((a + 0.5 * Math.PI) / pi2 + 0.5) % 1.0;
+				lightness = ((a + 0.5 * pi) / pi2 + 0.5) % 1.0;
 			}
 
-			validate();
+			validateHSLV();
+
 			clear();
 			renderHueKnob(!isLuma);
 
@@ -492,8 +461,8 @@ function HueWheel(elementID, options) {
 			isOver = ctx.isPointInPath(x, y);
 
 			if (isOver) {
-				canvas.style.cursor = 'pointer';
-				return false;
+				canvasStyle.cursor = "pointer";
+				return false
 			}
 
 			/*
@@ -503,19 +472,19 @@ function HueWheel(elementID, options) {
 			isOver = ctx.isPointInPath(x, y);
 
 			if (isOver) {
-				canvas.style.cursor = 'pointer';
+				canvasStyle.cursor = "pointer";
 				return false;
 			}
 
 			/*
 			 *	Check if HUE RING
 			*/
-			if (d > hr - thickness * 0.5 && d < hr + thickness * 0.5) {
-				canvas.style.cursor = 'crosshair';
+			if (d > radiusHue - thickness * 0.5 && d < radiusHue + thickness * 0.5) {
+				canvasStyle.cursor = "crosshair";
 				return false;
 			}
 
-			canvas.style.cursor = 'default';
+			canvasStyle.cursor = "default";
 		}
 
 		return false;
@@ -523,9 +492,9 @@ function HueWheel(elementID, options) {
 
 	function mouseUp(e) {
 		cevent(e);
-		canvas.style.cursor = 'default';
+		canvasStyle.cursor = "default";
 		isDown = false;
-		render();
+		render()
 	}
 
 	/*
@@ -541,14 +510,14 @@ function HueWheel(elementID, options) {
 		switch(keyCode) {
 
 			case hueKeyCodeUp:
-				angle -= hueKeyDelta * factor;
-				if (angle < 0) angle += 360;
+				hue -= hueKeyDelta * factor;
+				if (hue < 0) hue += 360;
 				hasChanged = true;
 				break;
 
 			case hueKeyCodeDown:
-				angle += hueKeyDelta * factor;
-				angle %= 360;
+				hue += hueKeyDelta * factor;
+				hue %= 360;
 				hasChanged = true;
 				break;
 
@@ -579,7 +548,7 @@ function HueWheel(elementID, options) {
 
 		if (hasChanged) {
 			cevent(e);
-			me.hsl(angle, saturation, lightness);
+			me.hsl(hue, saturation, lightness);
 			sendEvent()
 		}
 
@@ -595,7 +564,7 @@ function HueWheel(elementID, options) {
 		var rect = canvas.getBoundingClientRect(),
 			touches = e.targetTouches;
 
-		isTouch = isDef(touches) && (msPointer ? e.pointerType === e.MSPOINTER_TYPE_TOUCH : true);
+		isTouch = touches && (msPointer ? e.pointerType === e.MSPOINTER_TYPE_TOUCH : true);
 
 		if (isTouch && (touches.length === 1 || (msPointer && e.isPrimary))) {
 			x = touches[0].clientX;
@@ -620,8 +589,8 @@ function HueWheel(elementID, options) {
 	 */
 	function getTri(x, y) {
 
-		var dx = x - cx,
-			dy = y - cy;
+		var dx = x - center,
+			dy = y - center;
 
 		return {
 			dist: Math.sqrt(dx*dx + dy*dy),
@@ -630,15 +599,15 @@ function HueWheel(elementID, options) {
 	}
 
 	/*
-	 *	Calc setup
+	 *	Calc sizes
 	*/
-	function setup() {
-		hr			= (w - thickness - lumaThickness * 3 - shadow * (useLuma ? 1 : 2)) * 0.5 + 1;	//hue radius
-		lr			= (w - lumaThickness - shadow) * 0.5 + 1;										//light. radius
-		lkw			= lumaThickness * 0.5;															//light knob
-		lumaKnob	= [cx - 1, cy + lr];
-		hueKnob		= [cx - thickness * 0.5, cy];
-		l 			= Math.max(w * knobWidth, 5);
+	function calcSizes() {
+		radiusHue = (diameter - thickness - lumaThickness * 3 - shadow * (useLuma ? 1 : 2)) * 0.5 + 1;	// hue radius
+		radiusLightness	= (diameter - lumaThickness - shadow) * 0.5 + 1;								// light. radius
+		lumaKnobWidth = lumaThickness * 0.5;															// light knob
+		lumaKnob = [center - 1, center + radiusLightness];
+		hueKnob	= [center - thickness * 0.5, center];
+		l = Math.max(diameter * knobWidth, 5);
 	}
 
 	/*
@@ -649,56 +618,47 @@ function HueWheel(elementID, options) {
 		var i,
 			rad,
 			oldRad,
-			mul,
-			p;
+			gwstep;
 
-		setup();
+		calcSizes();
 
-		ctx.clearRect(0, 0, w, h);
+		gwstep = 7 / (radiusHue * pi) * r2d;
 
-		canvas.width = canvas.height = w;
-		canvas.innerHTML = '<h1>No HTML5 Canvas support. Please upgrade the browser.</h1>';
+		canvas.width = canvas.height = diameter;
 
 		/*
 		 *	Render HUE wheel
 		*/
 		ctx.lineWidth = thickness;
 
-		if (shadow > 0) {
+		for(i = oldRad = 0; i < 360; i += gwstep) {
 
-			ctx.save();
-			ctx.save();
-
-			ctx.shadowColor = options.shadowColor || 'rgba(0, 0, 0, 1)';
-			ctx.shadowBlur = shadow;
+			rad = i * d2r;
 
 			ctx.beginPath();
-			ctx.arc(cx, cy, hr, 0, pi2);
-			ctx.closePath();
-			ctx.stroke();
-
-			ctx.restore();
-
-			ctx.globalCompositeOperation = 'destination-out';
-			ctx.beginPath();
-			ctx.arc(cx, cy, hr, 0, pi2);
-			ctx.closePath();
-			ctx.stroke();
-
-			ctx.restore();
-		}
-
-		for(i = 0, oldRad = 0, mul = 4 / gwstep; i < 360; i += gwstep) {
-
-			rad = (i + 1) * d2r;
-			p = i * mul;
-
-			ctx.strokeStyle = 'rgb(' + data[p] + ',' + data[p+1] + ',' + data[p+2] + ')';
-			ctx.beginPath();
-			ctx.arc(cx, cy, hr, oldRad, rad + 0.01);
+			ctx.arc(center, center, radiusHue, oldRad, rad + 0.01);
+			ctx.strokeStyle = "hsl(" + i + ",100%,50%)";
 			ctx.stroke();
 
 			oldRad = rad;
+		}
+
+		ctx.globalCompositeOperation = 'destination-over';
+
+		/*
+		 *	Render shadow
+		*/
+		if (shadow > 0) {
+			ctx.save();
+
+			ctx.shadowColor = options.shadowColor || "#000";
+			ctx.shadowBlur = shadow;
+
+			ctx.beginPath();
+			ctx.arc(center, center, radiusHue, 0, pi2);
+			ctx.stroke();
+
+			ctx.restore()
 		}
 
 		/*
@@ -708,25 +668,26 @@ function HueWheel(elementID, options) {
 
 			ctx.lineWidth = lumaThickness;
 
-			for(i = 0, oldRad = 0, mul = 4 / gwstep; i < 360; i += gwstep) {
+			for(i = 0, oldRad = dlt; i < 360; i += gwstep) {
 
-				rad = (i + 1) * d2r + dlt;
-				p = (i + 360) * mul;
+				rad = i * d2r + dlt;
 
-				ctx.strokeStyle = 'rgb(' + data[p] + ',' + data[p+1] + ',' + data[p+2] + ')';
 				ctx.beginPath();
-				ctx.arc(cx, cy, lr, oldRad, rad + 0.01);
+				ctx.arc(center, center, radiusLightness, oldRad, rad + 0.01);
+				ctx.strokeStyle = "hsl(0,0%,+" + i / 3.60 + "%)";
 				ctx.stroke();
 
 				oldRad = rad;
 			}
 		}
 
+		ctx.globalCompositeOperation = "source-over";
+
 		/*
 		 *	Set static elements as background image of element
 		*/
-		canvas.style.backgroundImage = 'url(' + canvas.toDataURL() + ')';
-		ctx.clearRect(0, 0, w, h);
+		canvasStyle.backgroundImage = 'url(' + canvas.toDataURL() + ')';
+		ctx.clearRect(0, 0, diameter, diameter);
 	}
 
 	function renderHueKnob(selected) {
@@ -734,7 +695,7 @@ function HueWheel(elementID, options) {
 		getHueKnob(true);
 
 		if (hueShadow) {
-			ctx.shadowColor = options.shadowColor || 'rgba(0, 0, 0, 1)';
+			ctx.shadowColor = options.shadowColor || "#000";
 			ctx.shadowBlur = shadow;
 		}
 
@@ -743,10 +704,8 @@ function HueWheel(elementID, options) {
 		ctx.fillStyle = selected ? hueKnobColorSel : hueKnobColor;
 		ctx.fill();
 
-		if (hueShadow) {
-			ctx.shadowColor = 'rgba(0, 0, 0, 0)';
-			ctx.shadowBlur = 0;
-		}
+		ctx.shadowColor = "transparent";
+		ctx.shadowBlur = 0;
 
 		ctx.stroke();
 	}
@@ -755,35 +714,33 @@ function HueWheel(elementID, options) {
 
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-		ctx.translate(cx, cy);
-		ctx.rotate(angle * d2r);
-		ctx.translate(-cx, -cy);
+		ctx.translate(center, center);
+		ctx.rotate(hue * d2r);
+		ctx.translate(-center, -center);
 
-		var	kx = cx + l + (hr - thickness * 0.5 - l) * (useSat ? saturation : 1.0);
+		var	kx = center + l + (radiusHue - thickness * 0.5 - l) * (useSat ? saturation : 1.0);
 
 		if (useSat && drawLine) {
 			ctx.lineWidth = 1;
 
 			ctx.beginPath();
-			ctx.moveTo(cx, cy - 0.5);
-			ctx.lineTo(cx + hr - thickness * 0.5, cy - 0.5);
+			ctx.moveTo(center, center - 0.5);
+			ctx.lineTo(center + radiusHue - thickness * 0.5, center - 0.5);
 			ctx.strokeStyle = '#000';
 			ctx.stroke();
 
 			ctx.beginPath();
-			ctx.moveTo(cx, cy + 0.5);
-			ctx.lineTo(cx + hr - thickness * 0.5, cy + 0.5);
+			ctx.moveTo(center, center + 0.5);
+			ctx.lineTo(center + radiusHue - thickness * 0.5, center + 0.5);
 			ctx.strokeStyle = '#fff';
 			ctx.stroke();
 		}
 
 		ctx.beginPath();
-		ctx.moveTo(kx - 1, cy);
-		ctx.lineTo(kx - l, cy - l * 0.7);
-		ctx.lineTo(kx - l, cy + l  * 0.7);
+		ctx.moveTo(kx - 1, center);
+		ctx.lineTo(kx - l, center - l * 0.7);
+		ctx.lineTo(kx - l, center + l  * 0.7);
 		ctx.closePath();
-
-		//ctx.setTransform(1, 0, 0, 1, 0, 0);
 	}
 
 	function renderLumaKnob(selected) {
@@ -794,19 +751,19 @@ function HueWheel(elementID, options) {
 	function getLumaKnob(render, selected) {
 
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
-		ctx.translate(cx, cy);
+		ctx.translate(center, center);
 		ctx.rotate(pi2 * lightness);
-		ctx.translate(-cx, -cy);
+		ctx.translate(-center, -center);
 
 		if (render) {
 			ctx.beginPath();
-			ctx.arc(lumaKnob[0], lumaKnob[1], lkw, 0, pi2);
+			ctx.arc(lumaKnob[0], lumaKnob[1], lumaKnobWidth, 0, pi2);
 			ctx.closePath();
 			ctx.fillStyle = '#000';
 			ctx.fill();
 
 			ctx.beginPath();
-			ctx.arc(lumaKnob[0], lumaKnob[1], lkw - 1, 0, pi2);
+			ctx.arc(lumaKnob[0], lumaKnob[1], lumaKnobWidth - 1, 0, pi2);
 			ctx.closePath();
 			ctx.fillStyle = selected ? lightKnobColorSel : lightKnobColor;
 			ctx.fill();
@@ -814,7 +771,7 @@ function HueWheel(elementID, options) {
 		}
 		else {
 			ctx.beginPath();
-			ctx.arc(lumaKnob[0], lumaKnob[1], lkw, 0, pi2);
+			ctx.arc(lumaKnob[0], lumaKnob[1], lumaKnobWidth, 0, pi2);
 			ctx.closePath();
 		}
 	}
@@ -829,13 +786,13 @@ function HueWheel(elementID, options) {
 
 		getRGB();
 
-		ctx.clearRect(0, 0, w, h);
+		ctx.clearRect(0, 0, diameter, diameter);
 
 		if (showColor) {
-			var rd = (hr - thickness * 0.5) * colorWidth;
+			var rd = (radiusHue - thickness * 0.5) * colorWidth;
 
 			ctx.beginPath();
-			ctx.arc(cx, cy, rd, 0, pi2);
+			ctx.arc(center, center, rd, 0, pi2);
 			ctx.closePath();
 			ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
 			ctx.fill();
@@ -847,11 +804,11 @@ function HueWheel(elementID, options) {
 	}
 
 	function getRGB() {
-		var rgb = isHSL ? hsl2rgb(angle, saturation, lightness) : hsv2rgb(angle, saturation, lightness);
+		var rgb = isHSL ? hsl2rgb(hue, saturation, lightness) : hsv2rgb(hue, saturation, lightness);
 		r = rgb.r;
 		g = rgb.g;
 		b = rgb.b;
-		validate();
+		//validate();
 	}
 
 	/*
@@ -859,11 +816,11 @@ function HueWheel(elementID, options) {
 	*/
 	function sendEvent() {
 
-		clearTimeout(to);
+		clearTimeout(timeoutRef);
 
-		if (me.onchange !== null)
-			to = setTimeout(me.onchange({
-				h: angle % 360,
+		if (me.onchange)
+			timeoutRef = setTimeout(me.onchange({
+				h: hue % 360,
 				s: saturation,
 				l: lightness,
 				v: lightness,
@@ -874,34 +831,21 @@ function HueWheel(elementID, options) {
 				y: y,
 				isIE: msPointer,
 				isTouch: isTouch
-			}), 12);
+			}), 7);
 	}
 
-	function validate() {
-
-		angle %= 360;
-
+	function validateHSLV() {
+		hue %= 360;
 		saturation = Math.max(0, Math.min(saturation, 1));
 		lightness = Math.max(0, Math.min(lightness, 1));
-
-		var c = validateRGB(r, g, b);
-
-		r = c.r;
-		g = c.g;
-		b = c.b;
 	}
 
 	function validateRGB(r, g, b) {
-
-		r = (r + 0.5)|0;
-		g = (g + 0.5)|0;
-		b = (b + 0.5)|0;
-
-		r = Math.max(0, Math.min(r, 255));
-		g = Math.max(0, Math.min(g, 255));
-		b = Math.max(0, Math.min(b, 255));
-
-		return {r:r, g:g, b:b}
+		return {
+			r: Math.max(0, Math.min(r|0, 255)),
+			g: Math.max(0, Math.min(g|0, 255)),
+			b: Math.max(0, Math.min(b|0, 255))
+		}
 	}
 
 	/*
@@ -913,39 +857,19 @@ function HueWheel(elementID, options) {
 
 		var i = h|0,
 			f = h - i,
-			s1 = 1 - s,
-			m = v * s1,
-			n = v * (s1 * f),
-			k = v * (s1 * (1 - f)),
+			m = v * (1 - s),
+			n = v * (1 - (s * f)),
+			k = v * (1 - (s * (1 - f))),
 			rgb;
 
-		switch (i) {
-			case 0:
-				rgb = [v, k, m];
-				break;
-			case 1:
-				rgb = [n, v, m];
-				break;
-			case 2:
-				rgb = [m, v, k];
-				break;
-			case 3:
-				rgb = [m, n, v];
-				break;
-			case 4:
-				rgb = [k, m, v];
-				break;
-			case 5:
-			case 6:
-				rgb = [v, m, n];
-				break;
-		}
+		if (i === 0) rgb = [v, k, m];
+		else if (i === 1) rgb = [n, v, m];
+		else if (i === 2) rgb = [m, v, k];
+		else if (i === 3) rgb = [m, n, v];
+		else if (i === 4) rgb = [k, m, v];
+		else rgb = [v, m, n];
 
-		return {
-			r: (rgb[0] * 255 + 0.5) | 0,
-			g: (rgb[1] * 255 + 0.5) | 0,
-			b: (rgb[2] * 255 + 0.5) | 0
-		}
+		return validateRGB(rgb[0] * 255, rgb[1] * 255, rgb[2] * 255)
 	}
 
 	function hsl2rgb(h, s, l) {
@@ -956,16 +880,8 @@ function HueWheel(elementID, options) {
 
 		if (s === 0) {
 			r = g = b = l;
-
-		} else {
-			function hue2rgb(p, q, t) {
-				t %= 1;
-				if (t < 0.166667) return p + (q - p) * t * 6;
-				if (t < 0.5) return q;
-				if (t < 0.666667) return p + (q - p) * (0.666667 - t) * 6;
-				return p;
-			}
-
+		}
+		else {
 			q = l < 0.5 ? l * (1 + s) : l + s - l * s;
 			p = 2 * l - q;
 
@@ -974,19 +890,15 @@ function HueWheel(elementID, options) {
 			b = hue2rgb(p, q, h - 0.333333);
 		}
 
-		r = (r * 255 + 0.5)|0;
-		g = (g * 255 + 0.5)|0;
-		b = (b * 255 + 0.5)|0;
-
-		r = Math.max(0, Math.min(r, 255));
-		g = Math.max(0, Math.min(g, 255));
-		b = Math.max(0, Math.min(b, 255));
-
-		return {
-			r: r,
-			g: g,
-			b: b
+		function hue2rgb(p, q, t) {
+			t %= 1;
+			if (t < 0.166667) return p + (q - p) * t * 6;
+			if (t < 0.5) return q;
+			if (t < 0.666667) return p + (q - p) * (0.666667 - t) * 6;
+			return p;
 		}
+
+		return validateRGB(r * 255, g * 255, b * 255)
 	}
 
 	function rgb2hsl(r, g, b){
@@ -1006,18 +918,19 @@ function HueWheel(elementID, options) {
 
 			if (l < 0.5) {
 				s = d / (maxColor + minColor);
-			} else {
+			}
+			else {
 				s = d / (2.0 - maxColor - minColor);
 			}
 
 			//Calculate H:
 			if (r === maxColor) {
 				h = (g - b) / d;
-
-			} else if (g === maxColor) {
+			}
+			else if (g === maxColor) {
 				h = 2.0 + (b - r) / d;
-
-			} else {
+			}
+			else {
 				h = 4.0 + (r - g) / d;
 			}
 		}
@@ -1087,11 +1000,11 @@ function HueWheel(elementID, options) {
 		if (!arguments.length) {
 
 			if (isHSL) {
-				return {h: angle, s: saturation, l: lightness};
+				return {h: hue, s: saturation, l: lightness};
 			}
 			else {
 
-				var rgb = hsv2rgb(angle, saturation, lightness),
+				var rgb = hsv2rgb(hue, saturation, lightness),
 					hsl = rgb2hsl(rgb.r, rgb.g, rgb.b);
 
 				return {h: hsl.h, s: hsl.s, l: hsl.l};
@@ -1119,12 +1032,12 @@ function HueWheel(elementID, options) {
 
 		if (!arguments.length) {
 			if (isHSL) {
-				rgb = hsl2rgb(angle, saturation, lightness);
+				rgb = hsl2rgb(hue, saturation, lightness);
 				hsv = rgb2hsv(rgb.r, rgb.g, rgb.b);
 				return {h: hsv.h, s: hsv.s, v: hsv.v};
 			}
 			else {
-				return {h: angle, s: saturation, v: lightness};
+				return {h: hue, s: saturation, v: lightness};
 			}
 		}
 
@@ -1138,11 +1051,11 @@ function HueWheel(elementID, options) {
 
 	function setHSLV(h, s, l) {
 
-		angle = h;
+		hue = h;
 		saturation = s;
 		lightness = l;
+		validateHSLV();
 
-		validate();
 		render();
 		//sendEvent();
 	}
@@ -1160,7 +1073,7 @@ function HueWheel(elementID, options) {
 	this.rgb = function(r, g, b) {
 
 		if (!arguments.length)
-			return {h: angle, s: saturation, l: lightness, v: lightness};
+			return {h: hue, s: saturation, l: lightness, v: lightness};
 
 		var rgb = validateRGB(r, g, b);
 
@@ -1170,11 +1083,11 @@ function HueWheel(elementID, options) {
 
 		var hsl = (isHSL) ? rgb2hsl(r, g, b) : rgb2hsv(r, g, b);
 
-		angle = hsl.h;
+		hue = hsl.h;
 		saturation = hsl.s;
 		lightness = hsl.l || hsl.v;
+		validateHSLV();
 
-		validate();
 		render();
 		sendEvent();
 
@@ -1184,10 +1097,7 @@ function HueWheel(elementID, options) {
 	/*
 	 *	Internal helpers
 	*/
-	function isStr(a) {return (typeof a === 'string')}
 	function isBool(a) {return (typeof a === 'boolean')}
-	function isNum(a) {return (typeof a === 'number')}
-	function isDef(a) {return (typeof a !== 'undefined')}
 
 	/*
 	 *	METHODS
@@ -1202,14 +1112,12 @@ function HueWheel(elementID, options) {
 	 */
 	this.showColor = function(state) {
 
-		if (!arguments.length || !isBool(state))
-			return showColor;
+		if (!arguments.length) return showColor;
 
-		showColor = state;
-
+		showColor = !!state;
 		render();
 
-		return this;
+		return this
 	};
 
 	/**
@@ -1226,12 +1134,12 @@ function HueWheel(elementID, options) {
 
 		useLuma = state;
 
-		lumaThickness = useLuma ? (options.lumaThickness || Math.max(w * 0.05, 3)) : 0;
+		lumaThickness = useLuma ? Math.max(diameter * 0.05, 3) : 0;
 
 		generateCanvas();
 		render();
 
-		return this;
+		return this
 	};
 
 	/**
@@ -1243,10 +1151,9 @@ function HueWheel(elementID, options) {
 	 */
 	this.changeSaturation = function(state) {
 
-		if (!arguments.length || !isBool(state))
-			return useSat;
+		if (!arguments.length) return useSat;
 
-		useSat = state;
+		useSat = !!state;
 
 		generateCanvas();
 		render();
@@ -1263,11 +1170,10 @@ function HueWheel(elementID, options) {
 	 */
 	this.thicknessHue = function(t) {
 
-		if (!arguments.length || !isNum(t))
-			return thickness;
+		if (!arguments.length) return thickness;
 
 		if (t < 3) t = 3;
-		if (t > w * 0.3) t = (w * 0.3)|0;
+		if (t > diameter * 0.3) t = (diameter * 0.3)|0;
 
 		thickness = t;
 
@@ -1286,18 +1192,17 @@ function HueWheel(elementID, options) {
 	 */
 	this.thicknessLightness = function(t) {
 
-		if (!arguments.length || !isNum(t))
-			return thickness;
+		if (!arguments.length) return thickness;
 
 		if (t < 3) t = 3;
-		if (t > w * 0.2) t = (w * 0.2)|0;
+		if (t > diameter * 0.2) t = (diameter * 0.2)|0;
 
 		lumaThickness = t;
 
 		generateCanvas();
 		render();
 
-		return this;
+		return this
 	};
 
 	/**
@@ -1309,56 +1214,55 @@ function HueWheel(elementID, options) {
 	 */
 	this.colorSpotRadius = function(radiusFactor) {
 
-		if (!arguments.length || !isNum(radiusFactor))
-			return colorWidth;
+		if (!arguments.length) return colorWidth;
 
-		colorWidth = radiusFactor;
+		colorWidth = +radiusFactor;
 
 		generateCanvas();
 		render();
 
-		return this;
+		return this
 	};
 
 	/**
 	 * Set or get color space (HSL or HSV).
 	 *
-	 * @param {String} [spc] - name of color space
+	 * @param {String} [colSpace] - name of color space
 	 * @returns {*}
 	 */
-	this.colorSpace = function(spc) {
+	this.colorSpace = function(colSpace) {
 
-		if (!arguments.length || (spc !== 'hsl' && spc !== 'hsv'))
+		if (!arguments.length || (colSpace !== 'hsl' && colSpace !== 'hsv'))
 			return isHSL ? 'hsl' : 'hsv';
 
 		var rgb, c;
 
-		if (isHSL && spc === 'hsv') {
+		if (isHSL && colSpace === 'hsv') {
 
-			rgb = hsl2rgb(angle, saturation, lightness);
+			rgb = hsl2rgb(hue, saturation, lightness);
 			c = rgb2hsv(rgb.r, rgb.g, rgb.b);
 
-			angle = c.h;
+			hue = c.h;
 			saturation = c.s;
 			lightness = c.v;
 
 		}
-		else if (!isHSL && spc === 'hsl') {
+		else if (!isHSL && colSpace === 'hsl') {
 
-			rgb = hsv2rgb(angle, saturation, lightness);
+			rgb = hsv2rgb(hue, saturation, lightness);
 			c = rgb2hsl(rgb.r, rgb.g, rgb.b);
 
-			angle = c.h;
+			hue = c.h;
 			saturation = c.s;
 			lightness = c.l;
 		}
 
-		isHSL = (spc === 'hsl');
+		isHSL = (colSpace === 'hsl');
 
 		render();
 		sendEvent();
 
-		return this;
+		return this
 	};
 
 	/**
@@ -1370,13 +1274,22 @@ function HueWheel(elementID, options) {
 	 * @returns {*}
 	 */
 	this.lightnessClickable = function(state) {
+		if (!arguments.length) return lightClickable;
+		lightClickable = !!state;
+		return this
+	};
 
-		if (!arguments.length || !isBool(state))
-			return lightClickable;
-
-		lightClickable = state;
-
-		return this;
+	/**
+	 * Enable or disable holding the CTRL-key to lock Hue while moving
+	 * saturation.
+	 *
+	 * @param state
+	 * @returns {*}
+	 */
+	this.ctrlLock = function(state) {
+		if (!arguments.length) return ctrlLock;
+		ctrlLock = !!state;
+		return this
 	};
 
 	/*

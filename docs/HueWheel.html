@@ -3,97 +3,108 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>HueWheel Class: HueWheel</title>
+	<meta name="viewport" content="width=device-width">
+	<title>Hue wheel Class: HueWheel</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	<link type="text/css" rel="stylesheet" href="styles/sunlight.dark.css">
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
 
-	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+	<link type="text/css" rel="stylesheet" href="styles/site.lumen.css">
 
 </head>
 
 <body>
-<div class="container-fluid">
-	<div class="navbar navbar-fixed-top ">
-		<div class="navbar-inner">
-			<a class="brand" href="index.html">HueWheel</a>
-			<ul class="nav">
-				
-				<li class="dropdown">
-					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
-						class="caret"></b></a>
 
-					<ul class="dropdown-menu ">
-						
-						<li>
-							<a href="HueWheel.html">HueWheel</a>
-						</li>
-						
-
-					</ul>
-				</li>
-				
-				<li class="dropdown">
-					<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b
-						class="caret"></b></a>
-
-					<ul class="dropdown-menu ">
-						
-						<li>
-							<a href="HueWheel.html#event:mouseEvent">HueWheel#event:mouseEvent</a>
-						</li>
-						
-
-					</ul>
-				</li>
-				
-			</ul>
-		</div>
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Hue wheel</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="HueWheel.html">HueWheel</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="HueWheel.html#event:mouseEvent">HueWheel#event:mouseEvent</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+		<div class="col-sm-3 col-md-3">
+            <form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
 	</div>
 
-	<div class="row-fluid">
+</div>
+</div>
 
-		
-		<div class="span8">
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
 			
-				<div id="main">
-					
-
 
 	<h1 class="page-title">Class: HueWheel</h1>
 <section>
 
 <header>
-    <h2>
-    HueWheel
-    </h2>
+    
+        <h2>
+        HueWheel
+        </h2>
+        
     
 </header>
+
 
 <article>
     <div class="container-overview">
     
-
-    
         
+<hr>
 <dt>
-    <h4 class="name" id="HueWheel"><span class="type-signature"></span>new HueWheel<span class="signature">(elementID, <span class="optional">options</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="HueWheel"><span class="type-signature"></span>new HueWheel(parent [, options])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Create a new instance of a Hue wheel.</p>
+        <p>Create a new instance of a Hue wheel, replacing the content of given parent element with the control.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -101,29 +112,29 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
-                <td class="name"><code>elementID</code></td>
+                <td class="name"><code>parent</code></td>
             
 
             <td class="type">
@@ -133,6 +144,7 @@
 |
 
 <span class="param-type">HTMLElement</span>
+
 
 
             
@@ -150,10 +162,10 @@
 
             
 
-            <td class="description last"><p>ID of an element or the element itself to turn into a control</p></td>
+            <td class="description last"><p>parent element or ID of parent element to turn into a control (content will be replaced with the control).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -164,6 +176,7 @@
             
                 
 <span class="param-type">Object</span>
+
 
 
             
@@ -183,33 +196,33 @@
 
             
 
-            <td class="description last"><p>Options given as JSON</p>
-                <h6>Properties</h6>
+            <td class="description last"><p>Options given as a JSON object</p>
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
                 
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
-		<th>Default</th>
-		
+        
+        <th>Default</th>
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -220,6 +233,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -248,7 +262,7 @@
             <td class="description last"><p>diameter (in pixels) of control</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -259,6 +273,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -287,7 +302,7 @@
             <td class="description last"><p>diameter (in pixels) of shadow</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -298,6 +313,7 @@
             
                 
 <span class="param-type">String</span>
+
 
 
             
@@ -326,7 +342,7 @@
             <td class="description last"><p>CSS color of shadow if active (see shadowBlur)</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -337,6 +353,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -365,7 +382,7 @@
             <td class="description last"><p>Initial hue angle [0, 360]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -376,6 +393,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -404,7 +422,7 @@
             <td class="description last"><p>Initial saturation value [0.0, 1.0]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -415,6 +433,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -443,7 +462,7 @@
             <td class="description last"><p>Initial lightness value [0.0, 1.0]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -454,6 +473,7 @@
             
                 
 <span class="param-type">Array</span>
+
 
 
             
@@ -480,7 +500,7 @@
             <td class="description last"><p>Initial RGB value given as an array [r,g,b]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -491,6 +511,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -519,7 +540,7 @@
             <td class="description last"><p>Enable control to change saturation</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -530,6 +551,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -558,7 +580,7 @@
             <td class="description last"><p>Enable control to change lightness</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -569,6 +591,7 @@
             
                 
 <span class="param-type">String</span>
+
 
 
             
@@ -597,7 +620,7 @@
             <td class="description last"><p>Color space to use in control</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -608,6 +631,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -636,7 +660,7 @@
             <td class="description last"><p>Show current color in center of control</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -650,6 +674,7 @@
 |
 
 <span class="param-type">function</span>
+
 
 
             
@@ -676,7 +701,7 @@
             <td class="description last"><p>Function to call when current color changes</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -687,6 +712,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -715,7 +741,7 @@
             <td class="description last"><p>If showColor is used this is the ratio of the radius from center to the edge of hue wheel. Value can be [0.0, 1.0].</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -726,6 +752,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -754,7 +781,7 @@
             <td class="description last"><p>If showColor is used this is the width of the border. A value of 0 turns the border off.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -765,6 +792,7 @@
             
                 
 <span class="param-type">String</span>
+
 
 
             
@@ -793,7 +821,7 @@
             <td class="description last"><p>If showColor and colorBorder &gt; 0 this will be the color of the border.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -804,6 +832,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -830,7 +859,7 @@
             <td class="description last"><p>Thickness of hue ring in pixels</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -841,6 +870,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -867,46 +897,7 @@
             <td class="description last"><p>Thickness of lightness ring in pixels</p></td>
         </tr>
 
-	
-
-        <tr>
-            
-                <td class="name"><code>quality</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    2
-                
-                </td>
-            
-
-            <td class="description last"><p>Quality or resolution of internal gradients. Higher is better. Note: must be in steps of 2^q (ie., 1, 2, 4). The higher quality the longer time it takes to render the control.</p></td>
-        </tr>
-
-	
+    
 
         <tr>
             
@@ -917,6 +908,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -945,7 +937,7 @@
             <td class="description last"><p>A value [0.0, 1.0] determining the size of the hue knob relative to radius.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -956,6 +948,7 @@
             
                 
 <span class="param-type">String</span>
+
 
 
             
@@ -984,7 +977,7 @@
             <td class="description last"><p>Color of hue knob.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -995,6 +988,7 @@
             
                 
 <span class="param-type">String</span>
+
 
 
             
@@ -1023,7 +1017,7 @@
             <td class="description last"><p>Color of lightness knob (if ligthness ring is visible).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1034,6 +1028,7 @@
             
                 
 <span class="param-type">String</span>
+
 
 
             
@@ -1062,7 +1057,7 @@
             <td class="description last"><p>Color for hue knob when selected</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1073,6 +1068,7 @@
             
                 
 <span class="param-type">String</span>
+
 
 
             
@@ -1101,7 +1097,7 @@
             <td class="description last"><p>Color of lightness knob when selected (if ligthness ring is visible).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1112,6 +1108,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -1140,7 +1137,7 @@
             <td class="description last"><p>Makes lightness ring clickable (outside knob, inside ring).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1151,6 +1148,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -1179,7 +1177,7 @@
             <td class="description last"><p>Use shadow with hue knob if shadow is activated.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1190,6 +1188,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -1218,7 +1217,7 @@
             <td class="description last"><p>Enable usage of keys to control hsl when control is active.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1229,6 +1228,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1257,7 +1257,7 @@
             <td class="description last"><p>Delta values to increment/decrement the hue value with when its hotkey is pressed.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1268,6 +1268,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1296,7 +1297,7 @@
             <td class="description last"><p>Delta values to increment/decrement the saturation value with when its hotkey is pressed.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1307,6 +1308,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1335,7 +1337,7 @@
             <td class="description last"><p>Delta values to increment/decrement the lightness value with when its hotkey is pressed.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1346,6 +1348,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1374,7 +1377,7 @@
             <td class="description last"><p>When the shift key is held down the delta values are multiplied with this factor when using the hotkeys.</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1385,6 +1388,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1413,7 +1417,7 @@
             <td class="description last"><p>Key code to use to increase hue value (default page up).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1424,6 +1428,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1452,7 +1457,7 @@
             <td class="description last"><p>Key code to use to decrease hue value (default page down).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1463,6 +1468,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1491,7 +1497,7 @@
             <td class="description last"><p>Key code to use to increase hue value (default left arrow key).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1502,6 +1508,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1530,7 +1537,7 @@
             <td class="description last"><p>Key code to use to decrease hue value (default right arrow key).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1541,6 +1548,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1569,7 +1577,7 @@
             <td class="description last"><p>Key code to use to increase lightness value (default up arrow key).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1580,6 +1588,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -1608,7 +1617,7 @@
             <td class="description last"><p>Key code to use to increase lightness value (default down arrow key).</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1619,6 +1628,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -1647,28 +1657,76 @@
             <td class="description last"><p>Allows the control to be selected and operated with tab key and hotkeys.</p></td>
         </tr>
 
-	
-	</tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ctrlLock</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last"><p>Allow holding CTRL key to lock hue while moving saturation slider</p></td>
+        </tr>
+
+    
+    </tbody>
 </table>
 
             </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -1691,17 +1749,19 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
+
     
-    
-    
-    
+
     
 </dd>
 
@@ -1725,22 +1785,25 @@
 
         <dl>
             
+<hr>
 <dt>
-    <h4 class="name" id="changeLightness"><span class="type-signature"></span>changeLightness<span class="signature">(<span class="optional">state</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="changeLightness"><span class="type-signature"></span>changeLightness( [state])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Allow changing lightness (show or hide lightness ring).<br>If no arguments are given the current state is returned.</p>
+        <p>Allow changing lightness (show or hide lightness ring).
+If no arguments are given the current state is returned.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -1748,27 +1811,27 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
-		<th>Default</th>
-		
+        
+        <th>Default</th>
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -1779,6 +1842,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -1807,21 +1871,29 @@
             <td class="description last"></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -1844,15 +1916,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -1860,41 +1934,45 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="changeSaturation"><span class="type-signature"></span>changeSaturation<span class="signature">(<span class="optional">state</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="changeSaturation"><span class="type-signature"></span>changeSaturation( [state])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Allow changing saturation (show or hide saturation slider).<br>If no arguments are given the current state is returned.</p>
+        <p>Allow changing saturation (show or hide saturation slider).
+If no arguments are given the current state is returned.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -1902,27 +1980,27 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
-		<th>Default</th>
-		
+        
+        <th>Default</th>
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -1933,6 +2011,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -1961,21 +2040,29 @@
             <td class="description last"></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -1998,15 +2085,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -2014,32 +2103,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="colorSpace"><span class="type-signature"></span>colorSpace<span class="signature">(<span class="optional">spc</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="colorSpace"><span class="type-signature"></span>colorSpace( [colSpace])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         <p>Set or get color space (HSL or HSV).</p>
@@ -2047,8 +2138,9 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -2056,35 +2148,36 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
-                <td class="name"><code>spc</code></td>
+                <td class="name"><code>colSpace</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">String</span>
+
 
 
             
@@ -2107,21 +2200,29 @@
             <td class="description last"><p>name of color space</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -2144,15 +2245,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -2160,41 +2263,45 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="colorSpotRadius"><span class="type-signature"></span>colorSpotRadius<span class="signature">(<span class="optional">radiusFactor</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="colorSpotRadius"><span class="type-signature"></span>colorSpotRadius( [radiusFactor])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>A normalized factor of control's radius used for the color<br>spot. If no argument is given current radius factor is returned.</p>
+        <p>A normalized factor of control's radius used for the color
+spot. If no argument is given current radius factor is returned.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -2202,25 +2309,25 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -2231,6 +2338,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -2253,21 +2361,29 @@
             <td class="description last"><p>[0.0, 1.0]</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -2290,15 +2406,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -2306,41 +2424,45 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="hsl"><span class="type-signature"></span>hsl<span class="signature">(<span class="optional">h</span>, <span class="optional">s</span>, <span class="optional">l</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="ctrlLock"><span class="type-signature"></span>ctrlLock(state)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Set the Hue Wheel current value using HSL. If no arguments ar<br>given current color is returned as Object with h, s, l as<br>properties.</p>
+        <p>Enable or disable holding the CTRL-key to lock Hue while moving
+saturation.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -2348,25 +2470,169 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
 	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">*</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="hsl"><span class="type-signature"></span>hsl( [h] [, s] [, l])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set the Hue Wheel current value using HSL. If no arguments ar
+given current color is returned as Object with h, s, l as
+properties.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
 
         <tr>
             
@@ -2377,6 +2643,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -2399,7 +2666,7 @@
             <td class="description last"><p>Hue</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2410,6 +2677,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -2432,7 +2700,7 @@
             <td class="description last"><p>Saturation</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2443,6 +2711,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -2465,21 +2734,29 @@
             <td class="description last"><p>Lightness</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -2502,15 +2779,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -2518,32 +2797,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="hsl2rgb"><span class="type-signature"></span>hsl2rgb<span class="signature">(h, s, l)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="hsl2rgb"><span class="type-signature"></span>hsl2rgb(h, s, l)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         <p>Convert HSL to RGB</p>
@@ -2551,8 +2832,9 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -2560,23 +2842,23 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -2587,6 +2869,7 @@
             
                 
 <span class="param-type">number</span>
+
 
 
             
@@ -2599,7 +2882,7 @@
             <td class="description last"><p>hue [0, 360&gt;</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2612,6 +2895,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -2622,7 +2906,7 @@
             <td class="description last"><p>saturation [0.0, 1.0]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2635,6 +2919,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -2645,21 +2930,29 @@
             <td class="description last"><p>lightness [0.0, 1.0]</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -2682,15 +2975,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -2702,41 +2997,46 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="hsv"><span class="type-signature"></span>hsv<span class="signature">(<span class="optional">h</span>, <span class="optional">s</span>, <span class="optional">v</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="hsv"><span class="type-signature"></span>hsv( [h] [, s] [, v])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Set the Hue Wheel current value using HSV. If no arguments ar<br>given current color is returned as Object with h, s, v as<br>properties.</p>
+        <p>Set the Hue Wheel current value using HSV. If no arguments ar
+given current color is returned as Object with h, s, v as
+properties.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -2744,25 +3044,25 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -2773,6 +3073,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -2795,7 +3096,7 @@
             <td class="description last"><p>Hue</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2806,6 +3107,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -2828,7 +3130,7 @@
             <td class="description last"><p>Saturation</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2839,6 +3141,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -2861,21 +3164,29 @@
             <td class="description last"><p>Brightness</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -2898,15 +3209,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -2914,32 +3227,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="hsv2rgb"><span class="type-signature"></span>hsv2rgb<span class="signature">(h, s, v)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="hsv2rgb"><span class="type-signature"></span>hsv2rgb(h, s, v)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         <p>Convert HSV to RGB</p>
@@ -2947,8 +3262,9 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -2956,23 +3272,23 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -2985,6 +3301,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -2995,7 +3312,7 @@
             <td class="description last"><p>hue [0, 360&gt;</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -3008,6 +3325,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -3018,7 +3336,7 @@
             <td class="description last"><p>saturation [0.0, 1.0]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -3031,6 +3349,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -3041,21 +3360,29 @@
             <td class="description last"><p>brightness [0.0, 1.0]</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -3078,15 +3405,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -3098,41 +3427,46 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="lightnessClickable"><span class="type-signature"></span>lightnessClickable<span class="signature">(<span class="optional">state</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="lightnessClickable"><span class="type-signature"></span>lightnessClickable( [state])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Set or get if lightness ring should allow mouse to click anywhere<br>in the ring to set new lightness. If off the knob only can be<br>used.</p>
+        <p>Set or get if lightness ring should allow mouse to click anywhere
+in the ring to set new lightness. If off the knob only can be
+used.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -3140,25 +3474,25 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -3169,6 +3503,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -3191,21 +3526,29 @@
             <td class="description last"></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -3228,15 +3571,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -3244,41 +3589,46 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="rgb"><span class="type-signature"></span>rgb<span class="signature">(<span class="optional">r</span>, <span class="optional">g</span>, <span class="optional">b</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="rgb"><span class="type-signature"></span>rgb( [r] [, g] [, b])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Set the Hue Wheel current value using RGB. If no arguments ar<br>given current color is returned as Object with r, g, b as<br>properties.</p>
+        <p>Set the Hue Wheel current value using RGB. If no arguments ar
+given current color is returned as Object with r, g, b as
+properties.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -3286,25 +3636,25 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -3315,6 +3665,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -3337,7 +3688,7 @@
             <td class="description last"><p>red</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -3348,6 +3699,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -3370,7 +3722,7 @@
             <td class="description last"><p>green</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -3381,6 +3733,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -3403,21 +3756,29 @@
             <td class="description last"><p>blue</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -3440,15 +3801,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -3456,32 +3819,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="rgb2hsl"><span class="type-signature"></span>rgb2hsl<span class="signature">(r, g, b)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="rgb2hsl"><span class="type-signature"></span>rgb2hsl(r, g, b)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         <p>Convert RGB to HSL</p>
@@ -3489,8 +3854,9 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -3498,23 +3864,23 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -3527,6 +3893,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -3537,7 +3904,7 @@
             <td class="description last"><p>red component [0, 255]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -3550,6 +3917,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -3560,7 +3928,7 @@
             <td class="description last"><p>green component [0, 255]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -3573,6 +3941,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -3583,21 +3952,29 @@
             <td class="description last"><p>blue component [0, 255]</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -3620,15 +3997,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -3640,32 +4019,34 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="rgb2hsv"><span class="type-signature"></span>rgb2hsv<span class="signature">(r, g, b)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="rgb2hsv"><span class="type-signature"></span>rgb2hsv(r, g, b)</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         <p>Convert RGB to HSL</p>
@@ -3673,8 +4054,9 @@
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -3682,23 +4064,23 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -3711,6 +4093,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -3721,7 +4104,7 @@
             <td class="description last"><p>red component [0, 255]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -3734,6 +4117,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -3744,7 +4128,7 @@
             <td class="description last"><p>green component [0, 255]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -3757,6 +4141,7 @@
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -3767,21 +4152,29 @@
             <td class="description last"><p>blue component [0, 255]</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -3804,15 +4197,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -3824,41 +4219,45 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">object</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="showColor"><span class="type-signature"></span>showColor<span class="signature">(<span class="optional">state</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="showColor"><span class="type-signature"></span>showColor( [state])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Show or hide color spot. If no arguments are given the current<br>state is returned.</p>
+        <p>Show or hide color spot. If no arguments are given the current
+state is returned.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -3866,27 +4265,27 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
-		<th>Default</th>
-		
+        
+        <th>Default</th>
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -3897,6 +4296,7 @@
             
                 
 <span class="param-type">Boolean</span>
+
 
 
             
@@ -3925,21 +4325,29 @@
             <td class="description last"></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -3962,15 +4370,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -3978,41 +4388,45 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="thicknessHue"><span class="type-signature"></span>thicknessHue<span class="signature">(<span class="optional">t</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="thicknessHue"><span class="type-signature"></span>thicknessHue( [t])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Change thickness of Hue ring. If no argument is given then<br>current thickness is returned.</p>
+        <p>Change thickness of Hue ring. If no argument is given then
+current thickness is returned.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -4020,25 +4434,25 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -4049,6 +4463,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -4071,21 +4486,29 @@
             <td class="description last"><p>Factor or width max 30% of control diameter</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -4108,15 +4531,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -4124,41 +4549,45 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
         
             
+<hr>
 <dt>
-    <h4 class="name" id="thicknessLightness"><span class="type-signature"></span>thicknessLightness<span class="signature">(<span class="optional">t</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="thicknessLightness"><span class="type-signature"></span>thicknessLightness( [t])</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
-        <p>Change thickness of lightnes ring. If no argument is given then<br>current thickness is returned.</p>
+        <p>Change thickness of lightnes ring. If no argument is given then
+current thickness is returned.</p>
     </div>
     
 
     
+
     
-    
+
     
     
         <h5>Parameters:</h5>
@@ -4166,25 +4595,25 @@
 
 <table class="params table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Argument</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -4195,6 +4624,7 @@
             
                 
 <span class="param-type">Number</span>
+
 
 
             
@@ -4217,21 +4647,29 @@
             <td class="description last"><p>Factor or width max 20% of control diameter</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
     
-    
+
     
 <dl class="details">
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -4254,15 +4692,17 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
-    
-    
+
     
     <h5>Returns:</h5>
     
@@ -4270,20 +4710,21 @@
 
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">*</span>
 
 
-	</dd>
+
+    </dd>
 </dl>
 
 
         
-    
+
     
 </dd>
 
@@ -4297,13 +4738,14 @@
 
         <dl>
             
+<hr>
 <dt>
     <h4 class="name" id="event:mouseEvent">mouseEvent</h4>
     
     
 </dt>
 <dd>
-    
+
     
     <div class="description">
         <p>Event object for HueWheel (onchange)</p>
@@ -4311,48 +4753,45 @@
     
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
+
+    
+        <h5>Type: 
 <span class="param-type">Object</span>
 
 
-            </li>
-        </ul>
+</h5>
+    
+
     
     
-    
-    
-    
-    
+
     
 <dl class="details">
-	
+    
 
-	<h5 class="subsection-title">Properties:</h5>
+    <h5 class="subsection-title">Properties:</h5>
 
-	<dl>
+    <dl>
 
 <table class="props table table-striped">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -4365,6 +4804,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4375,7 +4815,7 @@
             <td class="description last"><p>current hue [0, 360&gt;</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4388,6 +4828,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4398,7 +4839,7 @@
             <td class="description last"><p>current saturation [0.0, 1.0]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4411,6 +4852,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4421,7 +4863,7 @@
             <td class="description last"><p>(if HSL mode) current lightness [0.0, 0.1]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4434,6 +4876,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4444,7 +4887,7 @@
             <td class="description last"><p>(if HSV mode) current brightness [0.0, 0.1]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4457,6 +4900,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4467,7 +4911,7 @@
             <td class="description last"><p>current red [0, 255]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4480,6 +4924,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4490,7 +4935,7 @@
             <td class="description last"><p>current green [0, 255]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4503,6 +4948,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4513,7 +4959,7 @@
             <td class="description last"><p>current blue [0, 255]</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4526,6 +4972,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4536,7 +4983,7 @@
             <td class="description last"><p>current x position in wheel</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4549,6 +4996,7 @@
 <span class="param-type">Number</span>
 
 
+
             
             </td>
 
@@ -4559,7 +5007,7 @@
             <td class="description last"><p>current y position in wheel</p></td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -4572,6 +5020,7 @@
 <span class="param-type">Boolean</span>
 
 
+
             
             </td>
 
@@ -4582,18 +5031,26 @@
             <td class="description last"><p>Event was triggered by touch and not mouse</p></td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 </dl>
 
-	
+    
 
 	
 
 	
 
 	
+
+    
+
+    
+
+    
+
+    
 
 	
 
@@ -4616,17 +5073,19 @@
 	
 </dl>
 
+
     
+
     
 
     
 
     
+
     
+
     
-    
-    
-    
+
     
 </dd>
 
@@ -4639,104 +5098,133 @@
 
 
 
-				</div>
-
-				<div class="clearfix"></div>
-				<footer>
-					
-					<p><b><a href='https://github.com/epistemex/'>Epistemex at GitHub</a></b></p>
-					<br />
-					
-					
-		<span class="copyright">
-		Copyright &copy; 2013-2016 Epistemex
-		</span>
-					<br />
-					
-		<span class="jsdoc-message">
-		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
-		on Mon Jul 25th 2016 using the <a
-			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
-		</span>
-				</footer>
-			</div>
-
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
-			
-			<br clear="both">
 		</div>
-
 	</div>
-	<!--<script src="scripts/sunlight.js"></script>-->
-	<script src="scripts/docstrap.lib.js"></script>
-	<script src="scripts/bootstrap-dropdown.js"></script>
-	<script src="scripts/toc.js"></script>
 
-	<script>
-		$( function () {
-			$( "[id*='$']" ).each( function () {
-				var $this = $( this );
+	<div class="clearfix"></div>
 
-				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
-			} );
-
-			$( "#toc" ).toc( {
-				anchorName  : function ( i, heading, prefix ) {
-					return $( heading ).attr( "id" ) || ( prefix + i );
-				},
-				selectors   : "h1,h2,h3,h4",
-				showAndHide : false,
-				scrollTo    : "100px"
-			} );
-
-			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
-			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
-			$( '.dropdown-toggle' ).dropdown();
-//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
-
-			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
-				var $this = $( this );
-
-				var example = $this.find( "code" );
-				exampleText = example.html();
-				var lang = /{@lang (.*?)}/.exec( exampleText );
-				if ( lang && lang[1] ) {
-					exampleText = exampleText.replace( lang[0], "" );
-					example.html( exampleText );
-					lang = lang[1];
-				} else {
-					lang = "javascript";
-				}
-
-				if ( lang ) {
-
-					$this
-						.addClass( "sunlight-highlight-" + lang )
-						.addClass( "linenums" )
-						.html( example.html() );
-
-				}
-			} );
-
-			Sunlight.highlightAll( {
-				lineNumbers : false,
-				showMenu : true,
-				enableDoclinks : true
-			} );
-		} );
-	 </script>
-
-
-
-	<!--Navigation and Symbol Display-->
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
 	
 
+</div>
+</div>
 
-	<!--Google Analytics-->
+<div class="modal fade" id="searchResults">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Search results</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<footer>
+
+	<p><b><a href='https://github.com/epistemex/'>Epistemex at GitHub</a></b></p>
+
+
+	<span class="copyright">
+	Copyright &copy; 2013-2016 Epistemex
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
+		on Thu Oct 13th 2016
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+<script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			var id = $( heading ).attr( "id" );
+			return id && id.replace(/\~/g, '-inner-').replace(/\./g, '-static-') || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		SearcherDisplay.init();
+	});
+</script>
 
 </body>
 </html>

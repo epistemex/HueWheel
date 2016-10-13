@@ -144,13 +144,14 @@ var ez1 = new easyCanvas('original'),
 		diameter: 300,
 		shadowBlur: 12,
 		colorSpace: 'hsl',
-		hue: 135,
+		hue: 20,
 		changeSaturation: true,
 		changeLightness: false,
 		showColorSpot: false,
 		thicknessHue: 25,
 		hueKnobSize: 0.17,
 		hueKnobShadow: true,
+		ctrlLock: true,
 		tabable: false          // disabled for "estetics"/demo
 	}),
 
@@ -174,9 +175,9 @@ var ez1 = new easyCanvas('original'),
 	img			= new Image;
 
 // load image
-img.crossOrigin = '';
 img.onload = addOption;
-img.src = 'http://i.imgur.com/j5XTaoH.jpg';
+img.crossOrigin = "";
+img.src = "//i.imgur.com/NbsspDq.jpg";
 
 option.addEventListener('click', showImage, false);
 document.getElementById('saveResult').addEventListener('click', saveImage, false);
