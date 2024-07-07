@@ -19,6 +19,9 @@ Features
 - Highly configurable (visible controls, sizes, start values, converted RGB <-> HSL/HSV, colors and more)
 - **New**: optional CTRL-key lock of hue while moving saturation slider
 
+_Help keep the project alive by supporting the developer:_
+
+[![PayPalMe](https://github.com/epistemex/transformation-matrix-js/assets/70324091/04203267-58f0-402b-9589-e2dee6e7c510)](https://paypal.me/KenNil)
 
 Examples
 ========
