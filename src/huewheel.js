@@ -1,5 +1,5 @@
 /*!
- *	Hue Wheel 1.2.1
+ *	Hue Wheel 1.2.2
  *	(c) 2013-2016 Epistemex.com
  *	License: MIT
 */
@@ -54,7 +54,7 @@ function HueWheel(parent, options) {
 
 	var	me					= this,
 		element 			= (typeof parent === "string") ? document.getElementById(parent) : parent,
-		msPointer			= navigator.msPointerEnabled,
+		msPointer			= !!navigator.msPointerEnabled,
 		canvas				= document.createElement('canvas'),
 		ctx					= canvas.getContext('2d'),
 		canvasStyle			= canvas.style,
