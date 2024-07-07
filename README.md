@@ -52,8 +52,6 @@ Lightness wheel disabled
 Lightness can still be changed programatically but is not visible in the control. Useful when you only want to
 tint an image using the luminance from the image as input instead.
 
-<img src="https://i.imgur.com/JkUToKR.png" alt="Lightness wheel disabled" />
-
 
 Saturation slider disabled
 --------------------------
