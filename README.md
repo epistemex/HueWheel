@@ -20,14 +20,6 @@ Features
 - **New**: optional CTRL-key lock of hue while moving saturation slider
 
 
-Demo
-====
-
-See this page for an interactive demo:
-
-[epistemex.github.io/huewheel/](https://epistemex.github.io/huewheel/)
-
-
 Examples
 ========
 
